@@ -1,4 +1,6 @@
-adds
-sal 1000
-xs afgwg
-apple 1
+1000
+meal h -110
+food ap -11
+bus 110 -12
+income s 100
+salary 100 10000
