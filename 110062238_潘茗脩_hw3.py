@@ -28,9 +28,13 @@ class Categories:
         """Initialize default categories."""
         self._categories = [
             'expense',
-            ['food', ['meal', 'snack', 'drink'], 'transportation', ['bus', 'railway']],
-            'income',
-            ['salary', 'bonus']
+                ['food', \
+                    ['meal', 'snack', 'drink'], \
+                'transportation', \
+                    ['bus', 'railway']\
+                ], \
+            'income', \
+                ['salary', 'bonus']
         ]
 
     def view(self, categories=None, indent=0):
@@ -74,11 +78,10 @@ class Categories:
 
 class Records:
     """Maintain a list of Record instances and the initial money."""
-    def __init__(self, categories):
+    def __init__(self):
         """
         Initialize records from 'records.txt' if valid, otherwise prompt for initial money.
         """
-        self._categories = categories
         self._records = []
         try:
             with open("records.txt", "r") as f:
@@ -89,8 +92,7 @@ class Records:
                 if len(parts) != 3:
                     continue
                 cat, desc, amt = parts[0], parts[1], int(parts[2])
-                if categories.is_category_valid(cat):
-                    self._records.append(Record(cat, desc, amt))
+                self._records.append(Record(cat, desc, amt))
             print("Welcome back!")
         except Exception:
             try:
@@ -99,7 +101,7 @@ class Records:
                 print("Invalid value for money. Set to 0 by default.")
                 self._initial_money = 0
 
-    def add(self, input_str):
+    def add(self, input_str, categories):
         """Add records from a comma-separated input string 'cat desc amt, ...'."""
         entries = input_str.split(",")
         for item in entries:
@@ -113,7 +115,7 @@ class Records:
             except ValueError:
                 print("Invalid amount.")
                 return
-            if not self._categories.is_category_valid(cat):
+            if not categories.is_category_valid(cat):
                 print("The specified category is not in the category list.")
                 print('You can check the category list by command "view categories".')
                 return
@@ -165,13 +167,13 @@ class Records:
 
 def main():
     categories = Categories()
-    records = Records(categories)
+    records = Records()
 
     while True:
         cmd = input('\nWhat do you want to do (add / view / delete / view categories / find / exit)? ')
         if cmd == 'add':
             inp = input("Add some expense or income records with category, description, and amount (separate by commas):\n")
-            records.add(inp)
+            records.add(inp, categories)
         elif cmd == 'view':
             records.view()
         elif cmd == 'delete':

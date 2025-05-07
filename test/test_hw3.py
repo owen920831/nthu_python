@@ -51,13 +51,13 @@ def test_records_init_and_save(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
 
     cats = Categories()
-    recs = Records(cats)
+    recs = Records()
     # Initialization
     assert recs._initial_money == 1000
     assert len(recs._records) == 2
     assert any(r.category == 'meal' and r.description == 'breakfast' and r.amount == -50 for r in recs._records)
     # Test save after modifications
-    recs.add('bus commute -20')
+    recs.add('bus commute -20', cats)
     recs.save()
     saved_lines = tmp_file.read_text().splitlines()
     assert saved_lines[0] == '1000'
@@ -66,15 +66,15 @@ def test_records_init_and_save(tmp_path, monkeypatch):
 
 def test_add_invalid_category(capsys):
     cats = Categories()
-    recs = Records(cats)
-    recs.add('clothing pants -100')
+    recs = Records()
+    recs.add('clothing pants -100', cats)
     captured = capsys.readouterr()
     assert 'not in the category list' in captured.out
 
 
 def test_delete_and_find(capsys):
     cats = Categories()
-    recs = Records(cats)
+    recs = Records()
     # Seed some records manually
     recs._records = [
         Record('meal', 'a', -10),
@@ -105,12 +105,12 @@ def test_delete_and_find(capsys):
 
 def test_view_outputs(capsys):
     cats = Categories()
-    recs = Records(cats)
+    recs = Records()
     recs._records = [Record('meal', 'test', -15)]
     recs._initial_money = 100
     recs.view()
     captured = capsys.readouterr().out
-    assert "Here\"s your expense and income records:" in captured
+    assert "Here\'s your expense and income records:" in captured
     assert 'meal' in captured
     assert 'test' in captured
     assert '85' in captured  # 100 - 15 = 85
