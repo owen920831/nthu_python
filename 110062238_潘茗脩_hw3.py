@@ -177,18 +177,18 @@ def main():
         elif cmd == 'view':
             records.view()
         elif cmd == 'delete':
-            idx = input("Enter the index of the record you want to delete: ")
-            records.delete(idx)
+            delete_record = input("Enter the index of the record you want to delete: ")
+            records.delete(delete_record)
         elif cmd == 'view categories':
             categories.view()
         elif cmd == 'find':
-            cat = input("Which category do you want to find? ")
-            subs = categories.find_subcategories(cat)
-            if not subs:
+            category = input("Which category do you want to find? ")
+            target_categories = categories.find_subcategories(category)
+            if not target_categories:
                 print("Category not found.")
             else:
-                print(f'Here are records under category "{cat}":')
-                records.find(subs)
+                print(f'Here are records under category "{category}":')
+                records.find(target_categories)
         elif cmd == 'exit':
             records.save()
             print("Goodbye!")
